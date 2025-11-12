@@ -1,0 +1,63 @@
+<div class="cve-summary-card">
+    <div class="summary-header">
+        <div class="summary-id">
+            <i class="fas fa-shield-alt"></i>
+            {{ cve.cveId|default('N/A') }}
+        </div>
+        <div class="summary-status">
+            <span class="status-pill status-{{ cve.vulnStatus|lower|default('unknown') }}">
+                {{ cve.vulnStatus|default('N/A') }}
+            </span>
+        </div>
+    </div>
+
+    <div class="summary-meta">
+        <div class="meta-badge">
+            <i class="fas fa-calendar"></i>
+            {{ cve.published[:10] if cve.published else 'N/A' }}
+        </div>
+        {% if cve.metrics %}
+            {% if cve.metrics.cvssMetricV2 and cve.metrics.cvssMetricV2|length > 0 %}
+                {% set metric = cve.metrics.cvssMetricV2[0] %}
+                <div class="severity-badge-large severity-{{ metric.baseSeverity|lower|default('unknown') }}">
+                    <span class="severity-icon">⚠️</span>
+                    <div class="severity-content">
+                        <div class="severity-name">{{ metric.baseSeverity|default('N/A') }}</div>
+                        <div class="severity-score">{{ metric.cvssData.baseScore|default('N/A') }}/10</div>
+                    </div>
+                </div>
+            {% elif cve.metrics.cvssMetricV31 and cve.metrics.cvssMetricV31|length > 0 %}
+                {% set metric = cve.metrics.cvssMetricV31[0] %}
+                <div class="severity-badge-large severity-{{ metric.cvssData.baseSeverity|lower|default('unknown') }}">
+                    <span class="severity-icon">⚠️</span>
+                    <div class="severity-content">
+                        <div class="severity-name">{{ metric.cvssData.baseSeverity|default('N/A') }}</div>
+                        <div class="severity-score">{{ metric.cvssData.baseScore|default('N/A') }}/10</div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <div class="summary-description">
+        <h4><i class="fas fa-info-circle"></i> Description</h4>
+        {% if cve.descriptions and cve.descriptions|length > 0 %}
+        <p>{{ cve.descriptions[0].value[:300] }}{% if cve.descriptions[0].value|length > 300 %}...{% endif %}</p>
+        {% else %}
+        <p class="text-muted">No description available.</p>
+        {% endif %}
+    </div>
+
+    {% if cve.weaknesses %}
+    <div class="summary-weaknesses">
+        <h4><i class="fas fa-bug"></i> Weaknesses</h4>
+        <div class="weakness-tags">
+            {% for weakness in cve.weaknesses[:3] %}
+                {% for desc in weakness.description %}
+                <span class="weakness-tag">{{ desc.value }}</span>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>

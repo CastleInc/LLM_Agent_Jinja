@@ -1,0 +1,31 @@
+{
+  "cveId": "{{ cve.cveId|default('N/A') }}",
+  "published": "{{ cve.published|default('N/A') }}",
+  "lastModified": "{{ cve.lastModified|default('N/A') }}",
+  "status": "{{ cve.vulnStatus|default('N/A') }}",
+  "description": "{% if cve.descriptions and cve.descriptions|length > 0 %}{{ cve.descriptions[0].value|replace('"', '\\"') }}{% else %}No description available{% endif %}",
+  {% if cve.metrics %}
+  {% if cve.metrics.cvssMetricV2 and cve.metrics.cvssMetricV2|length > 0 %}
+  "cvss": {
+    "version": "2.0",
+    "score": {{ cve.metrics.cvssMetricV2[0].cvssData.baseScore|default(0) }},
+    "severity": "{{ cve.metrics.cvssMetricV2[0].baseSeverity|default('N/A') }}",
+    "vector": "{{ cve.metrics.cvssMetricV2[0].cvssData.vectorString|default('N/A') }}"
+  },
+  {% elif cve.metrics.cvssMetricV31 and cve.metrics.cvssMetricV31|length > 0 %}
+  "cvss": {
+    "version": "3.1",
+    "score": {{ cve.metrics.cvssMetricV31[0].cvssData.baseScore|default(0) }},
+    "severity": "{{ cve.metrics.cvssMetricV31[0].cvssData.baseSeverity|default('N/A') }}",
+    "vector": "{{ cve.metrics.cvssMetricV31[0].cvssData.vectorString|default('N/A') }}"
+  },
+  {% endif %}
+  {% endif %}
+  "references": [
+    {% if cve.references %}
+    {% for ref in cve.references[:5] %}
+    "{{ ref.url }}"{% if not loop.last %},{% endif %}
+    {% endfor %}
+    {% endif %}
+  ]
+}

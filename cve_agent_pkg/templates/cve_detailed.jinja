@@ -1,0 +1,262 @@
+<div class="cve-report">
+    <div class="cve-header">
+        <div class="cve-id-badge">
+            <i class="fas fa-shield-alt"></i>
+            <span class="cve-id">{{ cve.cveId|default('N/A') }}</span>
+        </div>
+        <div class="cve-status">
+            <span class="status-badge status-{{ cve.vulnStatus|lower|default('unknown') }}">
+                {{ cve.vulnStatus|default('N/A') }}
+            </span>
+        </div>
+    </div>
+
+    <div class="cve-metadata">
+        <div class="metadata-item">
+            <i class="fas fa-calendar-plus"></i>
+            <div class="metadata-content">
+                <span class="metadata-label">Published</span>
+                <span class="metadata-value">{{ cve.published[:10] if cve.published else 'N/A' }}</span>
+            </div>
+        </div>
+        <div class="metadata-item">
+            <i class="fas fa-calendar-check"></i>
+            <div class="metadata-content">
+                <span class="metadata-label">Last Modified</span>
+                <span class="metadata-value">{{ cve.lastModified[:10] if cve.lastModified else 'N/A' }}</span>
+            </div>
+        </div>
+        <div class="metadata-item">
+            <i class="fas fa-building"></i>
+            <div class="metadata-content">
+                <span class="metadata-label">Source</span>
+                <span class="metadata-value">{{ cve.sourceIdentifier|default('N/A') }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="cve-section">
+        <div class="section-header">
+            <i class="fas fa-file-alt"></i>
+            <h3>Description</h3>
+        </div>
+        <div class="section-content">
+            {% if cve.descriptions %}
+                {% for desc in cve.descriptions %}
+                <div class="description-item">
+                    <span class="lang-badge">{{ desc.lang|upper }}</span>
+                    <p>{{ desc.value }}</p>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted">No description available.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if cve.metrics %}
+    <div class="cve-section">
+        <div class="section-header">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>CVSS Metrics</h3>
+        </div>
+        <div class="section-content">
+            {% if cve.metrics.cvssMetricV2 and cve.metrics.cvssMetricV2|length > 0 %}
+                {% set metric = cve.metrics.cvssMetricV2[0] %}
+                <div class="cvss-score-container">
+                    <div class="cvss-score-circle severity-{{ metric.baseSeverity|lower|default('unknown') }}">
+                        <div class="score-number">{{ metric.cvssData.baseScore|default('N/A') }}</div>
+                        <div class="score-label">Base Score</div>
+                    </div>
+                    <div class="cvss-severity">
+                        <span class="severity-badge severity-{{ metric.baseSeverity|lower|default('unknown') }}">
+                            {{ metric.baseSeverity|default('N/A') }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="cvss-vector">
+                    <i class="fas fa-link"></i>
+                    <code>{{ metric.cvssData.vectorString|default('N/A') }}</code>
+                </div>
+
+                <div class="cvss-details">
+                    <div class="detail-group">
+                        <h4><i class="fas fa-crosshairs"></i> Attack Details</h4>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">Access Vector</span>
+                                <span class="detail-value badge-pill">{{ metric.cvssData.accessVector|default('N/A') }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Access Complexity</span>
+                                <span class="detail-value badge-pill">{{ metric.cvssData.accessComplexity|default('N/A') }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Authentication</span>
+                                <span class="detail-value badge-pill">{{ metric.cvssData.authentication|default('N/A') }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-group">
+                        <h4><i class="fas fa-shield-virus"></i> Impact Assessment</h4>
+                        <div class="impact-bars">
+                            <div class="impact-item">
+                                <span class="impact-label">Confidentiality</span>
+                                <div class="impact-bar">
+                                    <div class="impact-fill impact-{{ metric.cvssData.confidentialityImpact|lower|default('none') }}"></div>
+                                </div>
+                                <span class="impact-value">{{ metric.cvssData.confidentialityImpact|default('N/A') }}</span>
+                            </div>
+                            <div class="impact-item">
+                                <span class="impact-label">Integrity</span>
+                                <div class="impact-bar">
+                                    <div class="impact-fill impact-{{ metric.cvssData.integrityImpact|lower|default('none') }}"></div>
+                                </div>
+                                <span class="impact-value">{{ metric.cvssData.integrityImpact|default('N/A') }}</span>
+                            </div>
+                            <div class="impact-item">
+                                <span class="impact-label">Availability</span>
+                                <div class="impact-bar">
+                                    <div class="impact-fill impact-{{ metric.cvssData.availabilityImpact|lower|default('none') }}"></div>
+                                </div>
+                                <span class="impact-value">{{ metric.cvssData.availabilityImpact|default('N/A') }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-group">
+                        <h4><i class="fas fa-chart-bar"></i> Exploitability Scores</h4>
+                        <div class="score-grid">
+                            <div class="score-card">
+                                <div class="score-card-value">{{ metric.exploitabilityScore|default('N/A') }}</div>
+                                <div class="score-card-label">Exploitability</div>
+                            </div>
+                            <div class="score-card">
+                                <div class="score-card-value">{{ metric.impactScore|default('N/A') }}</div>
+                                <div class="score-card-label">Impact</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            {% elif cve.metrics.cvssMetricV31 and cve.metrics.cvssMetricV31|length > 0 %}
+                {% set metric = cve.metrics.cvssMetricV31[0] %}
+                <div class="cvss-score-container">
+                    <div class="cvss-score-circle severity-{{ metric.cvssData.baseSeverity|lower|default('unknown') }}">
+                        <div class="score-number">{{ metric.cvssData.baseScore|default('N/A') }}</div>
+                        <div class="score-label">Base Score</div>
+                    </div>
+                    <div class="cvss-severity">
+                        <span class="severity-badge severity-{{ metric.cvssData.baseSeverity|lower|default('unknown') }}">
+                            {{ metric.cvssData.baseSeverity|default('N/A') }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="cvss-vector">
+                    <i class="fas fa-link"></i>
+                    <code>{{ metric.cvssData.vectorString|default('N/A') }}</code>
+                </div>
+
+                <div class="cvss-details">
+                    <div class="detail-group">
+                        <h4><i class="fas fa-crosshairs"></i> Attack Details</h4>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">Attack Vector</span>
+                                <span class="detail-value badge-pill">{{ metric.cvssData.attackVector|default('N/A') }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Attack Complexity</span>
+                                <span class="detail-value badge-pill">{{ metric.cvssData.attackComplexity|default('N/A') }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Privileges Required</span>
+                                <span class="detail-value badge-pill">{{ metric.cvssData.privilegesRequired|default('N/A') }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-group">
+                        <h4><i class="fas fa-shield-virus"></i> Impact Assessment</h4>
+                        <div class="impact-bars">
+                            <div class="impact-item">
+                                <span class="impact-label">Confidentiality</span>
+                                <div class="impact-bar">
+                                    <div class="impact-fill impact-{{ metric.cvssData.confidentialityImpact|lower|default('none') }}"></div>
+                                </div>
+                                <span class="impact-value">{{ metric.cvssData.confidentialityImpact|default('N/A') }}</span>
+                            </div>
+                            <div class="impact-item">
+                                <span class="impact-label">Integrity</span>
+                                <div class="impact-bar">
+                                    <div class="impact-fill impact-{{ metric.cvssData.integrityImpact|lower|default('none') }}"></div>
+                                </div>
+                                <span class="impact-value">{{ metric.cvssData.integrityImpact|default('N/A') }}</span>
+                            </div>
+                            <div class="impact-item">
+                                <span class="impact-label">Availability</span>
+                                <div class="impact-bar">
+                                    <div class="impact-fill impact-{{ metric.cvssData.availabilityImpact|lower|default('none') }}"></div>
+                                </div>
+                                <span class="impact-value">{{ metric.cvssData.availabilityImpact|default('N/A') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-muted">No CVSS metrics available.</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if cve.weaknesses %}
+    <div class="cve-section">
+        <div class="section-header">
+            <i class="fas fa-bug"></i>
+            <h3>Weaknesses (CWE)</h3>
+        </div>
+        <div class="section-content">
+            <div class="weakness-list">
+                {% for weakness in cve.weaknesses %}
+                    {% for desc in weakness.description %}
+                    <div class="weakness-item">
+                        <i class="fas fa-circle"></i>
+                        <span class="weakness-value">{{ desc.value }}</span>
+                        <span class="weakness-source">({{ weakness.source|default('N/A') }})</span>
+                    </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if cve.references %}
+    <div class="cve-section">
+        <div class="section-header">
+            <i class="fas fa-external-link-alt"></i>
+            <h3>References</h3>
+        </div>
+        <div class="section-content">
+            <div class="reference-list">
+                {% for ref in cve.references[:10] %}
+                <div class="reference-item">
+                    <i class="fas fa-link"></i>
+                    <a href="{{ ref.url }}" target="_blank" rel="noopener noreferrer">{{ ref.url }}</a>
+                </div>
+                {% endfor %}
+                {% if cve.references|length > 10 %}
+                <div class="reference-more">
+                    <i class="fas fa-ellipsis-h"></i>
+                    And {{ cve.references|length - 10 }} more references
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>

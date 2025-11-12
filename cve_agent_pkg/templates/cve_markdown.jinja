@@ -1,0 +1,81 @@
+# {{ cve.cveId|default('N/A') }}
+
+## Overview
+- **Status**: {{ cve.vulnStatus|default('N/A') }}
+- **Published**: {{ cve.published|default('N/A') }}
+- **Last Modified**: {{ cve.lastModified|default('N/A') }}
+- **Source**: {{ cve.sourceIdentifier|default('N/A') }}
+
+## Description
+{% if cve.descriptions %}
+{% for desc in cve.descriptions %}
+**{{ desc.lang|upper }}**: {{ desc.value }}
+
+{% endfor %}
+{% else %}
+No description available.
+{% endif %}
+
+## CVSS Metrics
+{% if cve.metrics %}
+{% if cve.metrics.cvssMetricV2 and cve.metrics.cvssMetricV2|length > 0 %}
+{% for metric in cve.metrics.cvssMetricV2 %}
+- **Base Score**: {{ metric.cvssData.baseScore|default('N/A') }} / 10.0
+- **Severity**: {{ metric.baseSeverity|default('N/A') }}
+- **Vector String**: `{{ metric.cvssData.vectorString|default('N/A') }}`
+
+### Attack Vector
+- Access Vector: {{ metric.cvssData.accessVector|default('N/A') }}
+- Access Complexity: {{ metric.cvssData.accessComplexity|default('N/A') }}
+- Authentication: {{ metric.cvssData.authentication|default('N/A') }}
+
+### Impact
+- Confidentiality: {{ metric.cvssData.confidentialityImpact|default('N/A') }}
+- Integrity: {{ metric.cvssData.integrityImpact|default('N/A') }}
+- Availability: {{ metric.cvssData.availabilityImpact|default('N/A') }}
+{% endfor %}
+{% elif cve.metrics.cvssMetricV31 and cve.metrics.cvssMetricV31|length > 0 %}
+{% for metric in cve.metrics.cvssMetricV31 %}
+- **Base Score**: {{ metric.cvssData.baseScore|default('N/A') }} / 10.0
+- **Severity**: {{ metric.cvssData.baseSeverity|default('N/A') }}
+- **Vector String**: `{{ metric.cvssData.vectorString|default('N/A') }}`
+
+### Attack Vector
+- Attack Vector: {{ metric.cvssData.attackVector|default('N/A') }}
+- Attack Complexity: {{ metric.cvssData.attackComplexity|default('N/A') }}
+- Privileges Required: {{ metric.cvssData.privilegesRequired|default('N/A') }}
+
+### Impact
+- Confidentiality: {{ metric.cvssData.confidentialityImpact|default('N/A') }}
+- Integrity: {{ metric.cvssData.integrityImpact|default('N/A') }}
+- Availability: {{ metric.cvssData.availabilityImpact|default('N/A') }}
+{% endfor %}
+{% else %}
+No CVSS metrics available.
+{% endif %}
+{% else %}
+No CVSS metrics available.
+{% endif %}
+
+## Weaknesses
+{% if cve.weaknesses %}
+{% for weakness in cve.weaknesses %}
+{% for desc in weakness.description %}
+- {{ desc.value }}
+{% endfor %}
+{% endfor %}
+{% else %}
+No weakness information available.
+{% endif %}
+
+## References
+{% if cve.references %}
+{% for ref in cve.references[:10] %}
+- {{ ref.url }}
+{% endfor %}
+{% if cve.references|length > 10 %}
+*... and {{ cve.references|length - 10 }} more*
+{% endif %}
+{% else %}
+No references available.
+{% endif %}
