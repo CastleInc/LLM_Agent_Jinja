@@ -71,15 +71,22 @@ def render_sidebar():
 
         # LLM Configuration
         st.markdown("### 🤖 LLM Settings")
+
+        # Show configured LLM model from environment
+        llm_model = os.getenv("LLM_MODEL_NAME", "gpt-4")
+        st.info(f"**Model:** {llm_model}")
+
         use_llm = st.checkbox("Use LLM (OpenAI)", value=False)
 
         if use_llm:
             api_key = st.text_input("OpenAI API Key", type="password",
                                    value=os.getenv("OPENAI_API_KEY", ""))
-            model = st.selectbox("Model", ["gpt-4", "gpt-3.5-turbo"], index=0)
 
             if api_key:
                 os.environ["OPENAI_API_KEY"] = api_key
+                st.success(f"✅ Using {llm_model}")
+            else:
+                st.warning("⚠️ API key required for LLM")
         else:
             st.info("Using rule-based processing (no LLM required)")
 
@@ -258,7 +265,9 @@ def process_user_query(user_input, use_llm):
             agent_msg['response'] = result['response']
 
         if not result.get('success', True):
-            agent_msg['response'] = f"❌ Error: {result.get('error', 'Unknown error')}"
+            # Show helpful error message from the result
+            error_message = result.get('result', {}).get('message', result.get('error', 'Unknown error'))
+            agent_msg['response'] = f"❌ {error_message}"
 
         st.session_state.conversation.append(agent_msg)
 
@@ -300,18 +309,18 @@ def render_example_queries():
     example_col1, example_col2, example_col3 = st.columns(3)
 
     with example_col1:
-        if st.button("🔍 Show me CVE-1999-0095", use_container_width=True, key="example1"):
-            st.session_state.pending_query = "Show me CVE-1999-0095"
+        if st.button("🔍 Show me CVE-1999-0776", use_container_width=True, key="example1"):
+            st.session_state.pending_query = "Show me CVE-1999-0776"
             st.rerun()
 
     with example_col2:
-        if st.button("⚠️ Find high severity CVEs", use_container_width=True, key="example2"):
-            st.session_state.pending_query = "Find high severity vulnerabilities"
+        if st.button("⚠️ Find functional exploits", use_container_width=True, key="example2"):
+            st.session_state.pending_query = "Find functional exploits"
             st.rerun()
 
     with example_col3:
-        if st.button("🔎 Search for sendmail CVEs", use_container_width=True, key="example3"):
-            st.session_state.pending_query = "Search for sendmail vulnerabilities"
+        if st.button("🔎 Search for traversal CVEs", use_container_width=True, key="example3"):
+            st.session_state.pending_query = "Search for directory traversal"
             st.rerun()
 
 

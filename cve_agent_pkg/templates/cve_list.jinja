@@ -10,27 +10,22 @@
             <div class="cve-list-header">
                 <div class="cve-id-section">
                     <i class="fas fa-shield-alt"></i>
-                    <span class="cve-id">{{ cve.cveId|default('N/A') }}</span>
+                    <span class="cve-id">{{ cve.cve_no|default('N/A') }}</span>
                 </div>
                 <div class="cve-severity">
-                    {% if cve.metrics %}
-                        {% if cve.metrics.cvssMetricV2 and cve.metrics.cvssMetricV2|length > 0 %}
-                            {% set severity = cve.metrics.cvssMetricV2[0].baseSeverity|default('UNKNOWN') %}
-                        {% elif cve.metrics.cvssMetricV31 and cve.metrics.cvssMetricV31|length > 0 %}
-                            {% set severity = cve.metrics.cvssMetricV31[0].cvssData.baseSeverity|default('UNKNOWN') %}
-                        {% else %}
-                            {% set severity = 'UNKNOWN' %}
-                        {% endif %}
-                    {% else %}
-                        {% set severity = 'UNKNOWN' %}
-                    {% endif %}
-                    <span class="severity-badge severity-{{ severity|lower }}">{{ severity }}</span>
+                    <span class="severity-badge severity-{{ cve.exploit_code_maturity|lower|replace(' ', '-')|default('unknown') }}">
+                        {{ cve.exploit_code_maturity|default('UNKNOWN') }}
+                    </span>
                 </div>
             </div>
 
+            <div class="cve-title">
+                <h3>{{ cve.cve_title|default('Untitled Vulnerability') }}</h3>
+            </div>
+
             <div class="cve-description">
-                {% if cve.descriptions and cve.descriptions|length > 0 %}
-                    <p>{{ cve.descriptions[0].value }}</p>
+                {% if cve.description %}
+                    <p>{{ cve.description[:200] }}{% if cve.description|length > 200 %}...{% endif %}</p>
                 {% else %}
                     <p class="text-muted">No description available</p>
                 {% endif %}
@@ -39,20 +34,19 @@
             <div class="cve-list-metadata">
                 <div class="metadata-chip">
                     <i class="fas fa-calendar"></i>
-                    <span>{{ cve.published[:10] if cve.published else 'N/A' }}</span>
+                    <span>{{ cve.valid_from[:10] if cve.valid_from else 'N/A' }}</span>
                 </div>
-                {% if cve.metrics %}
-                    {% if cve.metrics.cvssMetricV2 and cve.metrics.cvssMetricV2|length > 0 %}
-                        <div class="metadata-chip">
-                            <i class="fas fa-chart-line"></i>
-                            <span>CVSS: {{ cve.metrics.cvssMetricV2[0].cvssData.baseScore|default('N/A') }}</span>
-                        </div>
-                    {% elif cve.metrics.cvssMetricV31 and cve.metrics.cvssMetricV31|length > 0 %}
-                        <div class="metadata-chip">
-                            <i class="fas fa-chart-line"></i>
-                            <span>CVSS: {{ cve.metrics.cvssMetricV31[0].cvssData.baseScore|default('N/A') }}</span>
-                        </div>
-                    {% endif %}
+                {% if cve.keywords %}
+                <div class="metadata-chip">
+                    <i class="fas fa-tag"></i>
+                    <span>{{ cve.keywords }}</span>
+                </div>
+                {% endif %}
+                {% if cve.classifications_location %}
+                <div class="metadata-chip">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>{{ cve.classifications_location }}</span>
+                </div>
                 {% endif %}
             </div>
         </div>

@@ -4,7 +4,11 @@ MCP Agent - Routes queries to appropriate tools
 from typing import Dict, List, Any
 import json
 import re
+import os
+from dotenv import load_dotenv
 from cve_agent_pkg.mcp.tools import CVEMCPTools
+
+load_dotenv()
 
 
 class MCPAgent:
@@ -13,6 +17,8 @@ class MCPAgent:
     def __init__(self):
         self.tools = CVEMCPTools()
         self.conversation_history = []
+        self.llm_model_name = os.getenv('LLM_MODEL_NAME', 'gpt-4')
+        self.llm_model_url = os.getenv('LLM_MODEL_URL', 'https://api.openai.com/v1')
 
     def connect(self) -> bool:
         return self.tools.connect()
@@ -31,8 +37,9 @@ class MCPAgent:
     def _process_with_llm(self, user_query: str, llm_client) -> Dict[str, Any]:
         """Process using LLM with tool calling"""
         try:
+            # Use LLM model from environment
             response = llm_client.chat.completions.create(
-                model="gpt-4",
+                model=self.llm_model_name,
                 messages=[
                     {"role": "system", "content": "You are a CVE security assistant. Use tools to answer CVE queries."},
                     *self.conversation_history
@@ -69,10 +76,17 @@ class MCPAgent:
                     "tool_arguments": tool_args,
                     "result": result,
                     "rendered_output": result.get("data", {}).get("rendered_output", ""),
-                    "llm_used": True
+                    "llm_used": True,
+                    "llm_model": self.llm_model_name
                 }
 
-            return {"success": True, "query": user_query, "response": message.content, "llm_used": True}
+            return {
+                "success": True,
+                "query": user_query,
+                "response": message.content,
+                "llm_used": True,
+                "llm_model": self.llm_model_name
+            }
         except Exception as e:
             return {"success": False, "error": str(e), "query": user_query}
 
@@ -80,7 +94,7 @@ class MCPAgent:
         """Rule-based processing without LLM"""
         query_lower = user_query.lower()
 
-        # Check for CVE ID
+        # Check for CVE ID (CVE-YYYY-NNNNN format)
         cve_match = re.search(r'cve-\d{4}-\d{4,}', query_lower)
         if cve_match:
             cve_id = cve_match.group(0).upper()
@@ -97,22 +111,28 @@ class MCPAgent:
                 "llm_used": False
             }
 
-        # Check for severity
-        severity_map = {"critical": "CRITICAL", "high": "HIGH", "medium": "MEDIUM", "low": "LOW"}
-        for keyword, severity in severity_map.items():
+        # Check for severity/exploit maturity keywords
+        maturity_map = {
+            "functional": "Functional",
+            "proof of concept": "Proof of Concept",
+            "high": "High",
+            "unproven": "Unproven"
+        }
+
+        for keyword, maturity in maturity_map.items():
             if keyword in query_lower:
-                result = self.tools.execute_tool("search_cves_by_severity", {"severity": severity, "limit": 5})
+                result = self.tools.execute_tool("search_cves_by_exploit_maturity", {"maturity": maturity, "limit": 5})
                 return {
                     "success": result["success"],
                     "query": user_query,
-                    "tool_called": "search_cves_by_severity",
-                    "tool_arguments": {"severity": severity, "limit": 5},
+                    "tool_called": "search_cves_by_exploit_maturity",
+                    "tool_arguments": {"maturity": maturity, "limit": 5},
                     "result": result,
                     "rendered_output": result.get("data", {}).get("rendered_output", ""),
                     "llm_used": False
                 }
 
-        # Keyword search
+        # Keyword search in descriptions, titles, and keywords
         if any(word in query_lower for word in ["search", "find", "look"]):
             keywords = query_lower.replace("search for", "").replace("find", "").replace("look for", "").strip()
             if keywords:
@@ -131,7 +151,7 @@ class MCPAgent:
         return {
             "success": True,
             "query": user_query,
-            "response": "Try: 'Show me CVE-XXXX-XXXX', 'Find high severity CVEs', or 'Search for SQL injection'",
+            "response": "Try: 'Show me CVE-XXXX-XXXX', 'Find functional exploits', or 'Search for SQL injection'",
             "llm_used": False
         }
 

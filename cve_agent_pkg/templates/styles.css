@@ -502,6 +502,94 @@ body {
     font-style: italic;
 }
 
+/* CVE Title Section */
+.cve-title-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.cve-title-section h2 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.cve-title {
+    margin: 1rem 0;
+}
+
+.cve-title h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.technical-description {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: #f7fafc;
+    border-left: 3px solid var(--info-color);
+    border-radius: 4px;
+}
+
+.technical-description h4 {
+    margin: 0 0 0.5rem 0;
+    color: var(--info-color);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* CVE Summary Styles */
+.cve-summary {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+}
+
+.summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.summary-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.summary-content {
+    line-height: 1.8;
+}
+
+.summary-content p {
+    margin: 0.5rem 0;
+}
+
+.summary-metadata {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    border-radius: 8px;
+}
+
+.summary-metadata p {
+    margin: 0.75rem 0;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .cve-report {
