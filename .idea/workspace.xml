@@ -5,21 +5,55 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11a5db26-321d-4d67-a12e-df6581aeec43" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/LLM_Agent_Jinja.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.edit.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/app.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/core/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/core/agent.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/core/database.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/core/renderer.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/mcp/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/mcp/agent.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/mcp/tools.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/templates/cve_detailed.jinja" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/templates/cve_json.jinja" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/templates/cve_list.jinja" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/templates/cve_markdown.jinja" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/templates/cve_summary.jinja" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/templates/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/templates/styles.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/ui/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/ui/streamlit_app.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/ui/styles.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/utils/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cve_agent_pkg/utils/sample_data.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -49,7 +83,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.main">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="LLM_Agent_Jinja" />
       <option name="ENV_FILES" value="" />
@@ -91,7 +125,7 @@
       <option name="presentableId" value="Default" />
       <updated>1762976053751</updated>
       <workItem from="1762976056741" duration="2613000" />
-      <workItem from="1762985373732" duration="3919000" />
+      <workItem from="1762985373732" duration="22965000" />
     </task>
     <servers />
   </component>

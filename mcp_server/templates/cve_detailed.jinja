@@ -1,0 +1,131 @@
+<div style="background: #ffffff; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin: 1rem 0;">
+    <!-- Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid #e2e8f0;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 1.2rem; font-weight: 700; color: #667eea;">
+            <span>🛡️</span>
+            <span>{{ cve.cve_no|default('N/A') }}</span>
+        </div>
+        <div>
+            <span style="padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%); color: white;">
+                {{ cve.exploit_code_maturity|default('HIGH') }}
+            </span>
+        </div>
+    </div>
+
+    <!-- Title -->
+    <div style="margin-bottom: 1rem; padding: 0.75rem; background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%); border-radius: 6px; border-left: 4px solid #667eea;">
+        <h3 style="margin: 0; color: #2d3748; font-size: 1.1rem; font-weight: 600;">{{ cve.cve_title|default('Untitled Vulnerability') }}</h3>
+    </div>
+
+    <!-- Metadata -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin-bottom: 1rem; padding: 0.75rem; background: #f7fafc; border-radius: 6px;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.2rem;">📅</span>
+            <div>
+                <div style="font-size: 0.7rem; color: #718096; text-transform: uppercase; font-weight: 600;">Valid From</div>
+                <div style="font-size: 0.85rem; font-weight: 600; color: #2d3748;">{{ cve.valid_from[:10] if cve.valid_from else 'N/A' }}</div>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.2rem;">✅</span>
+            <div>
+                <div style="font-size: 0.7rem; color: #718096; text-transform: uppercase; font-weight: 600;">Last Modified</div>
+                <div style="font-size: 0.85rem; font-weight: 600; color: #2d3748;">{{ cve.source_last_modified_date[:10] if cve.source_last_modified_date else 'N/A' }}</div>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.2rem;">🏷️</span>
+            <div>
+                <div style="font-size: 0.7rem; color: #718096; text-transform: uppercase; font-weight: 600;">Keywords</div>
+                <div style="font-size: 0.85rem; font-weight: 600; color: #2d3748;">{{ cve.keywords|default('N/A') }}</div>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.2rem;">🛡️</span>
+            <div>
+                <div style="font-size: 0.7rem; color: #718096; text-transform: uppercase; font-weight: 600;">CISA KEV</div>
+                <div style="font-size: 0.85rem; font-weight: 600; color: #2d3748;">{{ cve.cisa_key|default('No') }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Description -->
+    <div style="margin-bottom: 1rem; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px; background: #fafafa;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #667eea;">
+            <span style="font-size: 1rem;">📄</span>
+            <h4 style="margin: 0; font-size: 1rem; font-weight: 700; color: #2d3748;">Description</h4>
+        </div>
+        <div style="padding: 0.5rem 0;">
+            <p style="margin: 0.5rem 0; line-height: 1.6; color: #4a5568;">{{ cve.description|default('No description available.') }}</p>
+            {% if cve.t_description %}
+            <div style="margin-top: 0.75rem; padding: 0.5rem; background: #f7fafc; border-left: 3px solid #4facfe; border-radius: 4px;">
+                <h5 style="margin: 0 0 0.25rem 0; font-size: 0.85rem; font-weight: 600; color: #4facfe;">Technical Details:</h5>
+                <p style="margin: 0; line-height: 1.5; color: #4a5568; font-size: 0.9rem;">{{ cve.t_description }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if cve.input_vector %}
+    <!-- CVSS Vector -->
+    <div style="margin-bottom: 1rem; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px; background: #fafafa;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #667eea;">
+            <span style="font-size: 1rem;">⚠️</span>
+            <h4 style="margin: 0; font-size: 1rem; font-weight: 700; color: #2d3748;">CVSS Vector</h4>
+        </div>
+        <div style="padding: 0.5rem; background: #2d3748; border-radius: 6px; margin-bottom: 0.75rem;">
+            <code style="color: #38ef7d; font-family: 'Courier New', monospace; font-size: 0.85rem;">{{ cve.input_vector }}</code>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Classifications -->
+    <div style="margin-bottom: 1rem; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px; background: #fafafa;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #667eea;">
+            <span style="font-size: 1rem;">🏷️</span>
+            <h4 style="margin: 0; font-size: 1rem; font-weight: 700; color: #2d3748;">Classifications</h4>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.5rem; padding: 0.5rem 0;">
+            {% if cve.classifications_location %}
+            <div>
+                <div style="font-size: 0.7rem; color: #718096; text-transform: uppercase; font-weight: 600;">Location</div>
+                <div style="font-size: 0.85rem; color: #2d3748;">{{ cve.classifications_location }}</div>
+            </div>
+            {% endif %}
+            {% if cve.classifications_attack_type %}
+            <div>
+                <div style="font-size: 0.7rem; color: #718096; text-transform: uppercase; font-weight: 600;">Attack Type</div>
+                <div style="font-size: 0.85rem; color: #2d3748;">{{ cve.classifications_attack_type }}</div>
+            </div>
+            {% endif %}
+            {% if cve.classifications_impact %}
+            <div>
+                <div style="font-size: 0.7rem; color: #718096; text-transform: uppercase; font-weight: 600;">Impact</div>
+                <div style="font-size: 0.85rem; color: #2d3748;">{{ cve.classifications_impact }}</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if cve.affected_products %}
+    <!-- Affected Products -->
+    <div style="margin-bottom: 1rem; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px; background: #fafafa;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #667eea;">
+            <span style="font-size: 1rem;">📦</span>
+            <h4 style="margin: 0; font-size: 1rem; font-weight: 700; color: #2d3748;">Affected Products</h4>
+        </div>
+        <p style="margin: 0.5rem 0; line-height: 1.6; color: #4a5568;">{{ cve.affected_products }}</p>
+    </div>
+    {% endif %}
+
+    {% if cve.solution %}
+    <!-- Solution -->
+    <div style="margin-bottom: 1rem; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px; background: #e6fffa;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #38ef7d;">
+            <span style="font-size: 1rem;">🔧</span>
+            <h4 style="margin: 0; font-size: 1rem; font-weight: 700; color: #2d3748;">Solution</h4>
+        </div>
+        <p style="margin: 0.5rem 0; line-height: 1.6; color: #4a5568;">{{ cve.solution }}</p>
+    </div>
+    {% endif %}
+</div>

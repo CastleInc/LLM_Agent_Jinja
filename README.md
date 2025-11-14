@@ -115,6 +115,29 @@ streamlit run app.py
 ✅ **Separated Concerns**: Logic, styling, and rendering are separate  
 ✅ **Professional**: Follows Python package best practices  
 
+## 🧹 Cleanup (2025-11)
+Legacy, redundant modules were removed to simplify maintenance:
+- `mcp_server/server.py` (old Flask server)
+- `mcp_server/tools.py` (duplicate tool layer)
+- `mcp_server/database.py` (obsolete DB wrapper)
+- `llm_agent_client/rest_api.py` (unused extra API)
+- `llm_agent_client/runner.py` (obsolete launcher)
+
+Current runtime components:
+- FastAPI MCP Server: `python mcp_server/main.py`
+- Streamlit UI: `streamlit run llm_agent_client/streamlit_app.py`
+- Mongo integration: `mongo_service` package
+
+Seed query buttons are available in the Streamlit sidebar for quick exploration.
+
+## ▶️ Run Now
+```bash
+# Start server
+python mcp_server/main.py &
+# Start UI
+streamlit run llm_agent_client/streamlit_app.py
+```
+
 ## 📝 License
 
 MIT License - See LICENSE file for details

@@ -1,0 +1,56 @@
+<div style="background: #ffffff; border-radius: 8px; padding: 1rem; margin: 1rem 0;">
+    <!-- List Header -->
+    <div style="margin-bottom: 1rem;">
+        <h3 style="margin: 0; font-size: 1.2rem; font-weight: 700; color: #2d3748;">
+            <span style="margin-right: 0.5rem;">📋</span>CVE Results
+        </h3>
+        <span style="font-size: 0.9rem; color: #718096;">{{ cves|length }} vulnerabilities found</span>
+    </div>
+
+    <!-- CVE List Items -->
+    {% for cve in cves %}
+    <div style="margin-bottom: 1rem; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px; background: #fafafa; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <!-- Item Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; font-weight: 700; color: #667eea;">
+                <span>🛡️</span>
+                <span>{{ cve.cve_no|default('N/A') }}</span>
+            </div>
+            <span style="padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 600; font-size: 0.7rem; text-transform: uppercase; background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%); color: white;">
+                {{ cve.exploit_code_maturity|default('UNKNOWN') }}
+            </span>
+        </div>
+
+        <!-- Title -->
+        <div style="margin-bottom: 0.5rem;">
+            <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: #2d3748;">{{ cve.cve_title|default('Untitled Vulnerability') }}</h4>
+        </div>
+
+        <!-- Description -->
+        <div style="margin-bottom: 0.5rem;">
+            {% if cve.description %}
+                <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: #4a5568;">{{ cve.description[:200] }}{% if cve.description|length > 200 %}...{% endif %}</p>
+            {% else %}
+                <p style="margin: 0; font-size: 0.85rem; color: #a0aec0; font-style: italic;">No description available</p>
+            {% endif %}
+        </div>
+
+        <!-- Metadata Chips -->
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+            <span style="padding: 0.25rem 0.5rem; background: #edf2f7; border-radius: 4px; font-size: 0.75rem; color: #4a5568;">
+                <span>📅</span> {{ cve.valid_from[:10] if cve.valid_from else 'N/A' }}
+            </span>
+            {% if cve.keywords %}
+            <span style="padding: 0.25rem 0.5rem; background: #e6fffa; border-radius: 4px; font-size: 0.75rem; color: #2c7a7b;">
+                <span>🏷️</span> {{ cve.keywords }}
+            </span>
+            {% endif %}
+            {% if cve.classifications_location %}
+            <span style="padding: 0.25rem 0.5rem; background: #fef5e7; border-radius: 4px; font-size: 0.75rem; color: #975a16;">
+                <span>📍</span> {{ cve.classifications_location }}
+            </span>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
